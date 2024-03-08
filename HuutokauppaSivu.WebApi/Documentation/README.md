@@ -19,7 +19,7 @@ https://github.com/dotnet/EntityFramework.Docs/blob/main/samples/core/DbContextP
 ````
 
 
-
+https://gist.github.com/joshbuchea/6f47e86d2510bce28f8e7f42ae84c716
 
 
 
