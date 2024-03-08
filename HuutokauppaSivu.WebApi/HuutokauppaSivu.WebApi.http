@@ -1,11 +1,11 @@
-@HuutokauppaSivu.WebApi_HostAddress = http://localhost:5235
+@HuutokauppaSivu.WebApi_HostAddress = http://localhost:7266
 
 GET {{HuutokauppaSivu.WebApi_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
 
-GET {{HuutokauppaSivu.WebApi_HostAddress}}/GetAll/
+GET {{HuutokauppaSivu.WebApi_HostAddress}}/GetMagicalItems/
 Accept: application/json
 
 

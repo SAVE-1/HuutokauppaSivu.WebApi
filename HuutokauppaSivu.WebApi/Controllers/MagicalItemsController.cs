@@ -14,11 +14,25 @@ public class MagicalItemsController
     }
 
     // GET all action
-    [HttpGet(Name = "GetMagicalItems")]
+    [HttpGet("GetMagicalItems")]
     public ActionResult<List<MagicalItem>> GetAll() {
         return MagicalItemsService.GetAll();
     }
-    
+
+    // GET all action
+    [HttpGet("GetMagicalItem/{id}")]
+    public ActionResult<List<MagicalItem>> GetAll(int id)
+    {
+        return MagicalItemsService.GetSingleFromDb(id);
+    }
+
+    // GET all action
+    [HttpGet("GetPromotedItems")]
+    public ActionResult<List<MagicalItem>> GetPromoted()
+    {
+        return MagicalItemsService.GetPromotedItems();
+    }
+
 
     // GET by Id action
     //[HttpGet("{id}")]

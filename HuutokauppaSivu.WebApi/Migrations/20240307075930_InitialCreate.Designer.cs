@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HuutokauppaSivu.WebApi.Migrations
 {
     [DbContext(typeof(MagigalItemsContext))]
-    [Migration("20240306133010_InitialCreate")]
+    [Migration("20240307075930_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -23,6 +23,12 @@ namespace HuutokauppaSivu.WebApi.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsPromoted")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
