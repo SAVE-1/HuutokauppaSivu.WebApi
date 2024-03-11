@@ -10,5 +10,6 @@ public class MagicalItem
     public string? Description { get; set; } = null;
     [JsonIgnore]
     public bool IsPromoted { get; set; }
+    public string? PromotionImage { get; set; }
 }
 
