@@ -9,8 +9,6 @@ public static class MagicalItemsService
 {
     public static string DbPath { get; }
 
-    static List<MagicalItem> MagicalItems { get; }
-
     static MagicalItemsService()
     {
 
@@ -20,7 +18,7 @@ public static class MagicalItemsService
     {
         using var db = new MagigalItemsContext();
 
-        var blog = db.MagicalItemInventory.Select(reg => reg);
+        var blog = db.MagicalItem.Select(reg => reg);
 
         return blog.ToList();
 
@@ -30,7 +28,7 @@ public static class MagicalItemsService
     {
         using var db = new MagigalItemsContext();
 
-        var blog = db.MagicalItemInventory.OrderBy(b => b.Id == id).First();
+        var blog = db.MagicalItem.OrderBy(b => b.Id == id).First();
 
         return new List<MagicalItem> { blog };
     }
@@ -39,7 +37,7 @@ public static class MagicalItemsService
     {
         using var db = new MagigalItemsContext();
 
-        var blog = db.MagicalItemInventory.Where(b => b.IsPromoted);
+        var blog = db.MagicalItem.Where(b => b.IsPromoted);
 
         return blog.ToList<MagicalItem>();
     }
