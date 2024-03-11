@@ -6,11 +6,18 @@ namespace Huutokauppa_sivu.Server.Data;
 
 public class MagigalItemsContext : DbContext
 {
-    public DbSet<MagicalItem> MagicalItemInventory { get; set; }
+    public DbSet<MagicalItem> MagicalItem { get; set; }
 
     public string DbPath { get; }
 
     public MagigalItemsContext()
+    {
+        var folder = Environment.CurrentDirectory;
+        DbPath = System.IO.Path.Join(folder, "itemcatalog.db");
+    }
+
+    public MagigalItemsContext(DbContextOptions<MagigalItemsContext> options)
+    : base(options)
     {
         var folder = Environment.CurrentDirectory;
         DbPath = System.IO.Path.Join(folder, "itemcatalog.db");
