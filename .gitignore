@@ -365,3 +365,11 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/HuutokauppaSivu.WebApi/itemcatalog.db
+/HuutokauppaSivu.WebApi/itemcatalog.db-shm
+/HuutokauppaSivu.WebApi/itemcatalog.db-wal
+/HuutokauppaSivu.WebApi/Migrations/20240307075930_InitialCreate.cs
+/HuutokauppaSivu.WebApi/Migrations/20240307075930_InitialCreate.Designer.cs
+/HuutokauppaSivu.WebApi/Migrations/20240311125107_InitialCreate.cs
+/HuutokauppaSivu.WebApi/Migrations/20240311125107_InitialCreate.Designer.cs
+/HuutokauppaSivu.WebApi/Migrations/MagigalItemsContextModelSnapshot.cs
