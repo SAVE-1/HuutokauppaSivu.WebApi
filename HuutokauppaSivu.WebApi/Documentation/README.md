@@ -22,4 +22,13 @@ https://github.com/dotnet/EntityFramework.Docs/blob/main/samples/core/DbContextP
 https://gist.github.com/joshbuchea/6f47e86d2510bce28f8e7f42ae84c716
 
 
+https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-mvc-app/working-with-sql?view=aspnetcore-8.0&tabs=visual-studio
+
+## Sisäänkirjautuminen
+https://learn.microsoft.com/en-us/aspnet/web-api/overview/security/authentication-and-authorization-in-aspnet-web-api
+
+## Itemin POISTO/DELETE, MUOKKAUS/UPDATE ja LISÄYS/POST handlerit
+https://learn.microsoft.com/en-us/aspnet/web-api/overview/advanced/http-message-handlers
+
+
 
