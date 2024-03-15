@@ -8,16 +8,16 @@ public static class SeedData
 {
     public static void Initialize(IServiceProvider serviceProvider)
     {
-        using (var context = new MagigalItemsContext(
+        using (var context = new MagicalItemsContext(
             serviceProvider.GetRequiredService<
-                DbContextOptions<MagigalItemsContext>>()))
+                DbContextOptions<MagicalItemsContext>>()))
         {
             // Look for any movies.
-            if (context.MagicalItem.Any())
+            if (context.MagicalItems.Any())
             {
                 return;   // DB has been seeded
             }
-            context.MagicalItem.AddRange(
+            context.MagicalItems.AddRange(
                 new MagicalItem
                 {
                     Name = "Divine Rapier",

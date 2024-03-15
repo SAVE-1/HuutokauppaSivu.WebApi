@@ -373,3 +373,4 @@ FodyWeavers.xsd
 /HuutokauppaSivu.WebApi/Migrations/20240311125107_InitialCreate.cs
 /HuutokauppaSivu.WebApi/Migrations/20240311125107_InitialCreate.Designer.cs
 /HuutokauppaSivu.WebApi/Migrations/MagigalItemsContextModelSnapshot.cs
+/HuutokauppaSivu.WebApi/appsettings.json

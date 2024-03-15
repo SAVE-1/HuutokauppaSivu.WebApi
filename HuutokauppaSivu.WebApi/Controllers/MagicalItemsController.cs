@@ -1,36 +1,38 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Huutokauppa_sivu.Server.Models;
+﻿using Huutokauppa_sivu.Server.Models;
 using Huutokauppa_sivu.Server.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Huutokauppa_sivu.Server.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class MagicalItemsController
+public class MagicalItemsController : ControllerBase
 {
-    public MagicalItemsController()
-    {
+    private readonly IItem _myService;
 
+    public MagicalItemsController(IItem myService)
+    {
+        _myService = myService;
     }
 
     // GET all action
     [HttpGet("GetMagicalItems")]
     public ActionResult<List<MagicalItem>> GetAll() {
-        return MagicalItemsService.GetAll();
+        return _myService.GetAll();
     }
 
     // GET all action
     [HttpGet("GetMagicalItem/{id}")]
     public ActionResult<List<MagicalItem>> GetAll(int id)
     {
-        return MagicalItemsService.GetSingleFromDb(id);
+        return _myService.GetSingleFromDb(id);
     }
 
     // GET all action
     [HttpGet("GetPromotedItems")]
     public ActionResult<List<MagicalItem>> GetPromoted()
     {
-        return MagicalItemsService.GetPromotedItems();
+        return _myService.GetPromotedItems();
     }
 
 
