@@ -4,6 +4,7 @@ namespace Huutokauppa_sivu.Server.Models;
 
 public class MagicalItem
 {
+    [JsonIgnore]
     public int Id { get; set; }
     public int Price { get; set; }
     public string? Name { get; set; }
@@ -11,5 +12,6 @@ public class MagicalItem
     [JsonIgnore]
     public bool IsPromoted { get; set; }
     public string? PromotionImage { get; set; }
+    public string? DeleteIdentification { get; set; }
 }
 
