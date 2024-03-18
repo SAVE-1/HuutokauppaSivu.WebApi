@@ -16,20 +16,20 @@ public class MagicalItemsController : ControllerBase
     }
 
     // GET all action
-    [HttpGet("GetMagicalItems")]
+    [HttpGet("")]
     public ActionResult<List<MagicalItem>> GetAll() {
         return _myService.GetAll();
     }
 
     // GET all action
-    [HttpGet("GetMagicalItem/{id}")]
-    public ActionResult<List<MagicalItem>> GetAll(int id)
+    [HttpGet("{id}")]
+    public ActionResult<MagicalItem> GetAll(int id)
     {
         return _myService.GetSingleFromDb(id);
     }
 
     // GET all action
-    [HttpGet("GetPromotedItems")]
+    [HttpGet("PromotedItems")]
     public ActionResult<List<MagicalItem>> GetPromoted()
     {
         return _myService.GetPromotedItems();
