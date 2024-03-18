@@ -1,6 +1,9 @@
 ﻿using Huutokauppa_sivu.Server.Models;
 using Huutokauppa_sivu.Server.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Huutokauppa_sivu.Server.Controllers;
 
@@ -17,15 +20,16 @@ public class MagicalItemsController : ControllerBase
 
     // GET all action
     [HttpGet("")]
-    public ActionResult<List<MagicalItem>> GetAll() {
-        return _myService.GetAll();
+    public IResult GetAll()
+    {
+        return Results.Ok(_myService.GetAll());
     }
 
     // GET all action
     [HttpGet("{id}")]
-    public ActionResult<MagicalItem> GetAll(int id)
+    public IResult GetAll(int id)
     {
-        return _myService.GetSingleFromDb(id);
+        return Results.Ok(_myService.GetSingleFromDb(id));
     }
 
     // GET all action
@@ -36,6 +40,7 @@ public class MagicalItemsController : ControllerBase
     }
 
     // POST action
+    [Authorize]
     [HttpGet("NewPosting")]
     public IResult Create(int price, string name, string description)
     {
@@ -65,13 +70,14 @@ public class MagicalItemsController : ControllerBase
         return Results.Problem();
     }
 
+    [Authorize]
     [HttpDelete("{deleteIdentification}")]
     public IResult Delete(string deleteIdentification)
     {
         MagicalItem item = _myService.Delete(deleteIdentification);
 
         if (item != null)
-    {
+        {
             return Results.Ok(item);
         }
 

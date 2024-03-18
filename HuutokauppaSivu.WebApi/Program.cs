@@ -9,12 +9,7 @@ using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-// builder.Services.AddDbContext<MagicalItemsContext>();
-
 builder.Services.AddScoped<IItem, MagicalItemsService>();
-
 
 builder.Services.AddCors(options =>
 {
@@ -47,7 +42,6 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddIdentityApiEndpoints<IdentityUser>()
     .AddEntityFrameworkStores<MagicalItemsContext>();
-
 
 
 var app = builder.Build();

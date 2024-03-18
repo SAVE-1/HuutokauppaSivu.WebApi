@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HuutokauppaSivu.WebApi.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -60,7 +60,8 @@ namespace HuutokauppaSivu.WebApi.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsPromoted = table.Column<bool>(type: "bit", nullable: false),
-                    PromotionImage = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    PromotionImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeleteIdentification = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
