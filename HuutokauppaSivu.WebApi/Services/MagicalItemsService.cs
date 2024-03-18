@@ -1,12 +1,13 @@
 ﻿using Huutokauppa_sivu.Server.Data;
 using Huutokauppa_sivu.Server.Models;
+using System.Linq;
 
 namespace Huutokauppa_sivu.Server.Services;
 
 public interface IItem
 {
     public List<MagicalItem> GetAll();
-    public List<MagicalItem> GetSingleFromDb(int id);
+    public MagicalItem GetSingleFromDb(int id);
     public List<MagicalItem> GetPromotedItems();
 }
 
@@ -26,11 +27,11 @@ public class MagicalItemsService : IItem
         return blog.ToList();
     }
 
-    public List<MagicalItem> GetSingleFromDb(int id)
+    public MagicalItem GetSingleFromDb(int id)
     {
-        var blog = _context.MagicalItems.OrderBy(b => b.Id == id).First();
+        var blog = _context.MagicalItems.Where(b => b.Id == id).First();
 
-        return new List<MagicalItem> { blog };
+        return blog;
     }
 
     public List<MagicalItem> GetPromotedItems()
