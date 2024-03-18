@@ -9,6 +9,8 @@ public interface IItem
     public List<MagicalItem> GetAll();
     public MagicalItem GetSingleFromDb(int id);
     public List<MagicalItem> GetPromotedItems();
+    public bool CreateNew(MagicalItem newItem);
+    public MagicalItem Delete(string deleteIdentification);
 }
 
 public class MagicalItemsService : IItem
@@ -41,4 +43,21 @@ public class MagicalItemsService : IItem
         return blog.ToList<MagicalItem>();
     }
 
+    public bool CreateNew(MagicalItem newItem)
+    {
+        var blog = _context.MagicalItems.Add(newItem);
+        
+        _context.SaveChanges();
+
+        return true;
+    }
+
+    public MagicalItem Delete(string deleteIdentification)
+    {
+        var blog = _context.MagicalItems.First(p => p.DeleteIdentification == deleteIdentification);
+        _context.Remove(blog);
+        _context.SaveChanges();
+
+        return blog;
+    }
 }
