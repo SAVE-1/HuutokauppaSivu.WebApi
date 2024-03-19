@@ -7,9 +7,9 @@ namespace Huutokauppa_sivu.Server.Services;
 
 public interface IItem
 {
-    public List<MagicalItem> GetAll();
+    public List<MagicalItem> GetAll(int take, int skip);
     public MagicalItem GetSingleFromDb(int id);
-    public List<MagicalItem> GetPromotedItems();
+    public List<MagicalItem> GetPromotedItems(int skip, int take);
     public bool CreateNew(MagicalItem newItem);
     public MagicalItem Delete(string deleteIdentification);
 }
@@ -23,9 +23,13 @@ public class MagicalItemsService : IItem
         _context = context;
     }
 
-    public List<MagicalItem> GetAll()
+    public List<MagicalItem> GetAll(int skip, int take)
     {
-        var blog = _context.MagicalItems.Select(reg => reg);
+        var blog = _context.MagicalItems
+            .Select(reg => reg)
+            .OrderBy(reg => reg.Id)
+            .Skip(skip)
+            .Take(take);
 
         return blog.ToList();
     }
@@ -37,9 +41,13 @@ public class MagicalItemsService : IItem
         return blog;
     }
 
-    public List<MagicalItem> GetPromotedItems()
+    public List<MagicalItem> GetPromotedItems(int skip, int take)
     {
-        var blog = _context.MagicalItems.Where(b => b.IsPromoted);
+        var blog = _context.MagicalItems
+            .Where(b => b.IsPromoted)
+            .OrderBy(reg => reg.Id)
+            .Skip(skip)
+            .Take(take);
 
         return blog.ToList<MagicalItem>();
     }

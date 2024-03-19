@@ -20,29 +20,36 @@ public class MagicalItemsController : ControllerBase
 
     // GET all action
     [HttpGet("")]
-    public IResult GetAll()
+    public IActionResult GetAll(int skip = 0, int take = 50)
     {
-        return Results.Ok(_myService.GetAll());
+        List<MagicalItem> all = _myService.GetAll(skip, take);
+
+        if(all.Any())
+        {
+            return Ok(all);
+        }
+
+        return new StatusCodeResult(StatusCodes.Status500InternalServerError);
     }
 
     // GET all action
     [HttpGet("{id}")]
-    public IResult GetAll(int id)
+    public IActionResult GetAll(int id)
     {
-        return Results.Ok(_myService.GetSingleFromDb(id));
+        return Ok(_myService.GetSingleFromDb(id));
     }
 
     // GET all action
     [HttpGet("PromotedItems")]
-    public IResult GetPromoted()
+    public IActionResult GetPromoted(int skip = 0, int take = 50)
     {
-        return Results.Ok(_myService.GetPromotedItems());
+        return Ok(_myService.GetPromotedItems(skip, take));
     }
 
     // POST action
     [Authorize]
     [HttpGet("NewPosting")]
-    public IResult Create(int price, string name, string description)
+    public IActionResult Create(int price, string name, string description)
     {
         MD5 sum = MD5.Create();
 
@@ -64,24 +71,24 @@ public class MagicalItemsController : ControllerBase
 
         if (createNewResult)
         {
-            return Results.Created("Created", item);
+            return Created("Created", item);
         }
 
-        return Results.Problem();
+        return Problem();
     }
 
     [Authorize]
     [HttpDelete("{deleteIdentification}")]
-    public IResult Delete(string deleteIdentification)
+    public IActionResult Delete(string deleteIdentification)
     {
         MagicalItem item = _myService.Delete(deleteIdentification);
 
         if (item != null)
         {
-            return Results.Ok(item);
+            return Ok(item);
         }
 
-        return Results.Problem();
+        return Problem();
     }
 
 
