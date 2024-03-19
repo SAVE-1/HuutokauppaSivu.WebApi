@@ -34,7 +34,7 @@ public class MagicalItemsController : ControllerBase
 
     // GET all action
     [HttpGet("{id}")]
-    public IActionResult GetAll(int id)
+    public IActionResult GetSingleById(int id)
     {
         return Ok(_myService.GetSingleFromDb(id));
     }
