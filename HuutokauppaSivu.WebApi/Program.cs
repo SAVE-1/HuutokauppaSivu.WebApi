@@ -2,7 +2,6 @@ using Huutokauppa_sivu.Server.Data;
 using Huutokauppa_sivu.Server.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyModel;
 using Microsoft.OpenApi.Models;
 using MvcMovie.Models;
 using Swashbuckle.AspNetCore.Filters;

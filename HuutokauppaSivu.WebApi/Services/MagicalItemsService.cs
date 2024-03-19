@@ -1,7 +1,5 @@
 ﻿using Huutokauppa_sivu.Server.Data;
 using Huutokauppa_sivu.Server.Models;
-using Microsoft.AspNetCore.Authorization;
-using System.Linq;
 
 namespace Huutokauppa_sivu.Server.Services;
 
