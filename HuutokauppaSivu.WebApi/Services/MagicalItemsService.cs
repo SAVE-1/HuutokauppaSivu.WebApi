@@ -10,6 +10,7 @@ public interface IItem
     public List<MagicalItem> GetPromotedItems(int skip, int take);
     public bool CreateNew(MagicalItem newItem);
     public MagicalItem Delete(string deleteIdentification);
+    public string GetPostingCreator(string id);
 }
 
 public class MagicalItemsService : IItem
@@ -66,5 +67,19 @@ public class MagicalItemsService : IItem
         _context.SaveChanges();
 
         return blog;
+    }
+
+    public string GetPostingCreator(string id)
+    {
+        var col = _context.MagicalItems
+                           .Where(b => b.DeleteIdentification == id);
+
+        if (col.Any())
+        {
+            MagicalItem item = col.First();
+            return item.CreatedBy!;
+        }
+
+        return "";
     }
 }

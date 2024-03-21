@@ -13,5 +13,7 @@ public class MagicalItem
     public bool IsPromoted { get; set; }
     public string? PromotionImage { get; set; }
     public string? DeleteIdentification { get; set; }
+    [JsonIgnore]
+    public string? CreatedBy { get; set; }
 }
 

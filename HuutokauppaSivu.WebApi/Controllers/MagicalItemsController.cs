@@ -2,6 +2,7 @@
 using Huutokauppa_sivu.Server.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -66,6 +67,7 @@ public class MagicalItemsController : ControllerBase
             IsPromoted = false,
             PromotionImage = null,
             DeleteIdentification = deleteIdentification,
+            CreatedBy = User.FindFirstValue(ClaimTypes.Name)
         };
 
         bool createNewResult = _myService.CreateNew(item);
@@ -82,14 +84,22 @@ public class MagicalItemsController : ControllerBase
     [HttpDelete("{deleteIdentification}")]
     public IActionResult Delete(string deleteIdentification)
     {
-        MagicalItem item = _myService.Delete(deleteIdentification);
+        string creator = _myService.GetPostingCreator(deleteIdentification);
+        string currentUser = User.FindFirstValue(ClaimTypes.Name);
 
-        if (item != null)
+        if (creator == currentUser)
         {
-            return Ok(item);
+            MagicalItem item = _myService.Delete(deleteIdentification);
+
+            if (item != null)
+            {
+                return Ok(item);
+            }
+
+            return Problem();
         }
 
-        return Problem();
+        return Unauthorized();
     }
 
 
