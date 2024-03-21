@@ -2,8 +2,25 @@
 
 https://learn.microsoft.com/en-us/ef/core/get-started/overview/first-app?tabs=netcore-cli
 
+# Requirements
+- MSSQL Express
 
-## Useful commands
+## Configuration file (appsettings.Development.json)
+````
+{
+  "ConnectionStrings": {
+    ""
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  }
+}
+````
+
+## How to generate the database
 ````
 dotnet ef migrations add InitialCreate
 dotnet ef database update
