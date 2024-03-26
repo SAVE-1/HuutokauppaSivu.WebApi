@@ -1,5 +1,8 @@
 ﻿using Huutokauppa_sivu.Server.Data;
 using Huutokauppa_sivu.Server.Models;
+using HuutokauppaSivu.WebApi.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Runtime.CompilerServices;
 
 namespace Huutokauppa_sivu.Server.Services;
 
@@ -11,6 +14,7 @@ public interface IItem
     public bool CreateNew(MagicalItem newItem);
     public MagicalItem Delete(string deleteIdentification);
     public string GetPostingCreator(string id);
+    public List<string> GetCategoriesForSingleId(string id);
 }
 
 public class MagicalItemsService : IItem
@@ -82,4 +86,34 @@ public class MagicalItemsService : IItem
 
         return "";
     }
+
+    public List<string> GetCategoriesForSingleId(string id)
+    {
+        /*
+            -- ORIGINAL SQL QUERY --
+            -- Get categories
+            SELECT item.[Id]
+            ,item.[Price]
+            ,item.[Name]
+	        ,look.[Name] as Category
+            FROM [HuutokauppaSivu].[dbo].[MagicalItems]       as item
+            INNER JOIN [HuutokauppaSivu].[dbo].ItemCategories as cat  ON(cat.MagicalItemId = item.Id)
+            INNER JOIN [HuutokauppaSivu].[dbo].CategoryLookup as look ON(cat.CategoryId = look.CategoryId)
+            -- WHERE item.name = 'AWP'
+            WHERE item.DeleteIdentification = 'EAC1A457CAD7092A1E6E9D1322BC5019'
+        */
+
+        // comments query in LINQ, https://learn.microsoft.com/en-us/ef/core/querying/complex-query-operators
+        var query = from item in _context.Set<MagicalItem>().Where(b => b.DeleteIdentification == id)
+                    join cat in _context.Set<ItemCategories>()
+                        on item.Id equals cat.MagicalItemId
+                    join look in _context.Set<CategoryLookup>()
+                        on cat.CategoryId equals look.CategoryId
+                    select new { look };
+
+        var categories = query.Select(b => b.look.Name).ToList();
+
+        return categories;
+    }
+
 }

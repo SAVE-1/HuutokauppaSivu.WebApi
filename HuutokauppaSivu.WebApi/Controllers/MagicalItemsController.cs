@@ -102,6 +102,14 @@ public class MagicalItemsController : ControllerBase
         return Unauthorized();
     }
 
+    [HttpGet("{id}/GetCategories")]
+    public IActionResult GetCategoriesByIdSingle(string id)
+    {
+        var l = _myService.GetCategoriesForSingleId(id);
+
+        return Ok(l);
+    }
+
 
     // GET by Id action
     //[HttpGet("{id}")]
