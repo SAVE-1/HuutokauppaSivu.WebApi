@@ -105,9 +105,9 @@ public class MagicalItemsController : ControllerBase
     [HttpGet("{id}/GetCategories")]
     public IActionResult GetCategoriesByIdSingle(string id)
     {
-        var l = _myService.GetCategoriesForSingleId(id);
+        var categories = _myService.GetCategoriesForSingleId(id);
 
-        return Ok(l);
+        return Ok(categories);
     }
 
 
