@@ -53,8 +53,9 @@ namespace HuutokauppaSivu.WebApi.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
-                    b.Property<int>("MagicalItemId")
-                        .HasColumnType("int");
+                    b.Property<string>("DeleteIdentification")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

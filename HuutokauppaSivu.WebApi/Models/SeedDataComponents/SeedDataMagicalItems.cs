@@ -9,6 +9,12 @@ public static partial class SeedData
 
     private static void SeedMagicalItems(IServiceProvider serviceProvider)
     {
+        // generate and store the keys so they can be easily referenced by other portions of the class
+        generatedKeys.Add("rapier", GetHash("rapier"));
+        generatedKeys.Add("awp", GetHash("awp"));
+        generatedKeys.Add("excal", GetHash("excal"));
+        generatedKeys.Add("aghs", GetHash("aghs"));
+
         using (var context = new MagicalItemsContext(
             serviceProvider.GetRequiredService<
                 DbContextOptions<MagicalItemsContext>>()))
@@ -27,7 +33,7 @@ public static partial class SeedData
                     Description = "The revered divine rapier",
                     IsPromoted = true,
                     PromotionImage = "rapier.jpg",
-                    DeleteIdentification = GetHash("rapier"),
+                    DeleteIdentification = generatedKeys["rapier"],
                     CreatedBy = "SYSTEM"
                 },
                 new MagicalItem
@@ -37,7 +43,7 @@ public static partial class SeedData
                     Description = "AWP",
                     IsPromoted = true,
                     PromotionImage = "awp.jpg",
-                    DeleteIdentification = GetHash("awp"),
+                    DeleteIdentification = generatedKeys["awp"],
                     CreatedBy = "SYSTEM"
                 },
                 new MagicalItem
@@ -47,7 +53,7 @@ public static partial class SeedData
                     Description = "Excalibur",
                     IsPromoted = false,
                     PromotionImage = "excal.jpg",
-                    DeleteIdentification = GetHash("excal"),
+                    DeleteIdentification = generatedKeys["excal"],
                     CreatedBy = "SYSTEM"
                 },
                 new MagicalItem
@@ -57,7 +63,7 @@ public static partial class SeedData
                     Description = "Aghs",
                     IsPromoted = true,
                     PromotionImage = "aghs.jpg",
-                    DeleteIdentification = GetHash("aghs"),
+                    DeleteIdentification = generatedKeys["aghs"],
                     CreatedBy = "SYSTEM"
                 }
             );

@@ -106,7 +106,7 @@ public class MagicalItemsService : IItem
         // comments query in LINQ, https://learn.microsoft.com/en-us/ef/core/querying/complex-query-operators
         var query = from item in _context.Set<MagicalItem>().Where(b => b.DeleteIdentification == id)
                     join cat in _context.Set<ItemCategories>()
-                        on item.Id equals cat.MagicalItemId
+                        on item.DeleteIdentification equals cat.DeleteIdentification
                     join look in _context.Set<CategoryLookup>()
                         on cat.CategoryId equals look.CategoryId
                     select new { look };

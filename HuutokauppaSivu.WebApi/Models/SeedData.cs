@@ -5,6 +5,8 @@ namespace MvcMovie.Models;
 
 public static partial class SeedData
 {
+    private static IDictionary<string, string> generatedKeys = new Dictionary<string, string>();
+
     public static void Initialize(IServiceProvider serviceProvider)
     {
         SeedMagicalItems(serviceProvider);

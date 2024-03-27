@@ -9,7 +9,7 @@ public class ItemCategories
     public int CategoryId { get; set; }
 
     // id in reference bid item
-    public int MagicalItemId { get; set; }
+    public string DeleteIdentification { get; set; } = string.Empty;
 
 }
 

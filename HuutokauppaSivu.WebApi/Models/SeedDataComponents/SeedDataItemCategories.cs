@@ -22,32 +22,32 @@ public static partial class SeedData
                 new ItemCategories
                 {
                     CategoryId = 1,
-                    MagicalItemId = 1,
+                    DeleteIdentification = generatedKeys["rapier"]
                 },
                 new ItemCategories
                 {
                     CategoryId = 2,
-                    MagicalItemId = 2
+                    DeleteIdentification = generatedKeys["awp"]
                 },
                 new ItemCategories
                 {
                     CategoryId = 3,
-                    MagicalItemId = 3
+                    DeleteIdentification = generatedKeys["rapier"]
                 },
                 new ItemCategories
                 {
                     CategoryId = 4,
-                    MagicalItemId = 4
+                    DeleteIdentification = generatedKeys["awp"]
                 },
                 new ItemCategories
                 {
                     CategoryId = 5,
-                    MagicalItemId = 4
+                    DeleteIdentification = generatedKeys["awp"]
                 },
                 new ItemCategories
                 {
                     CategoryId = 6,
-                    MagicalItemId = 4
+                    DeleteIdentification = generatedKeys["awp"]
                 }
             );
 
