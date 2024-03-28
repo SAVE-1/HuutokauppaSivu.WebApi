@@ -1,5 +1,6 @@
 ﻿using Huutokauppa_sivu.Server.Models;
 using Huutokauppa_sivu.Server.Services;
+using HuutokauppaSivu.WebApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -49,9 +50,22 @@ public class MagicalItemsController : ControllerBase
 
     // POST action
     [Authorize]
-    [HttpGet("NewPosting")]
-    public IActionResult Create(int price, string name, string description)
+    [HttpPost("NewPosting")]
+    public IActionResult Create(int price, string name, string description, List<string> categories)
     {
+        if(categories.Count > 50)
+        {
+            return BadRequest("Too many categories in request");
+        }
+
+        List<CategoryLookup> validCategories = _myService.AreCategoriesValid(categories);
+
+        if (validCategories.Count != categories.Count)
+        {
+    {
+
+            return BadRequest($"Invalid categories in request: {invalidCategoriesString}");
+        }
         MD5 sum = MD5.Create();
 
         string preHash = name + DateTime.Now.ToString("HH:mm:ss tt") + "funky extra hash string thing";
@@ -71,6 +85,17 @@ public class MagicalItemsController : ControllerBase
         };
 
         bool createNewResult = _myService.CreateNew(item);
+
+        List<ItemCategories> itemCategories = new List<ItemCategories>();
+
+        foreach (string category in categories)
+        {
+            itemCategories.Add(new ItemCategories()
+            {
+                DeleteIdentification = deleteIdentification,
+                CategoryId = 1
+            });
+        }
 
         if (createNewResult)
         {

@@ -9,6 +9,13 @@ public static partial class SeedData
 
     public static void Initialize(IServiceProvider serviceProvider)
     {
+        List<string> keys = new List<string>()
+        {
+            "rapier", "awp", "excal", "aghs"
+        };
+
+        // generate and store the keys so they can be easily referenced by other portions of the class
+        GenerateKeys(keys);
         SeedMagicalItems(serviceProvider);
         SeedCategoryLookup(serviceProvider);
         SeedItemCategories(serviceProvider);
@@ -19,6 +26,14 @@ public static partial class SeedData
         string preHash = DateTime.Now.ToString("HH:mm:ss tt") + "funky extra hash string thing";
         MD5 sum = MD5.Create();
         return BitConverter.ToString(sum.ComputeHash(Encoding.ASCII.GetBytes(str + preHash))).Replace("-", "");
+    }
+
+    private static void GenerateKeys(List<string> names)
+    {
+        foreach (string name in names)
+        {
+            generatedKeys.Add(name, GetHash(name));
+        }
     }
 
 }

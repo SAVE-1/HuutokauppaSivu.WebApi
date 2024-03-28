@@ -3,6 +3,8 @@ using Huutokauppa_sivu.Server.Models;
 using HuutokauppaSivu.WebApi.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.CompilerServices;
+using EFCore.BulkExtensions;
+using System.Collections.Generic;
 
 namespace Huutokauppa_sivu.Server.Services;
 
@@ -15,6 +17,7 @@ public interface IItem
     public MagicalItem Delete(string deleteIdentification);
     public string GetPostingCreator(string id);
     public List<string> GetCategoriesForSingleId(string id);
+    public List<CategoryLookup> AreCategoriesValid(List<string> ids);
 }
 
 public class MagicalItemsService : IItem
@@ -58,7 +61,7 @@ public class MagicalItemsService : IItem
     public bool CreateNew(MagicalItem newItem)
     {
         var blog = _context.MagicalItems.Add(newItem);
-        
+
         _context.SaveChanges();
 
         return true;
@@ -114,6 +117,39 @@ public class MagicalItemsService : IItem
         var categories = query.Select(b => b.look.Name).ToList();
 
         return categories;
+    }
+
+    /// <summary>
+    /// Method <c>CheckIfExists</c> checks whether categories are valid.
+    /// </summary>
+    /// <returns>
+    /// Returns categories that are valid, so returnValue.Length > 0 means there are valid categories.
+    /// </returns>
+    public List<CategoryLookup> AreCategoriesValid(List<string> ids)
+    {
+        var l = _context.CategoryLookup.Where(b => ids.Contains(b.Name)).Select(b => new { b.Name, b.Id }).ToList();
+
+        List<CategoryLookup> cats = new List<CategoryLookup>();
+
+        foreach(var p in l)
+        {
+            cats.Add(new CategoryLookup { Name = p.Name, Id = p.Id });
+        }
+
+        return cats;
+    }
+
+    public void InsertCategoryLookupEntries(List<ItemCategories> entries)
+    {
+        _context.ItemCategories.AddRange(entries);
+    }
+
+    public List<CategoryLookup> GetCategories(List<string> names) 
+    {
+
+        return new List<CategoryLookup>();
+
+
     }
 
 }

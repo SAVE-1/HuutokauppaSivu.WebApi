@@ -9,12 +9,6 @@ public static partial class SeedData
 
     private static void SeedMagicalItems(IServiceProvider serviceProvider)
     {
-        // generate and store the keys so they can be easily referenced by other portions of the class
-        generatedKeys.Add("rapier", GetHash("rapier"));
-        generatedKeys.Add("awp", GetHash("awp"));
-        generatedKeys.Add("excal", GetHash("excal"));
-        generatedKeys.Add("aghs", GetHash("aghs"));
-
         using (var context = new MagicalItemsContext(
             serviceProvider.GetRequiredService<
                 DbContextOptions<MagicalItemsContext>>()))
