@@ -10,12 +10,37 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IItem, MagicalItemsService>();
 
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+// https://learn.microsoft.com/en-us/aspnet/core/security/cors?view=aspnetcore-8.0
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: "MyAllowSpecificOrigins",
+    options.AddPolicy(name: MyAllowSpecificOrigins,
                       policy =>
                       {
-                          policy.WithOrigins("http://localhost:8080");
+                          policy
+                          .WithOrigins(
+                             "http://localhost:8080",
+                             "https://localhost:8080",
+
+                             "http://localhost:8080/login",
+                             "https://localhost:8080/login",
+
+                             "http://localhost",
+                             "https://localhost",
+
+                             "http://localhost:7266/Login",
+                             "https://localhost:7266/Login",
+
+                             "http://localhost:7266",
+                             "https://localhost:7266",
+                             "127.0.0.1"
+                           )
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          //.SetIsOriginAllowed(origin => true) // allow any origin 
+                          .AllowCredentials();
+
                       });
 });
 
@@ -64,9 +89,10 @@ app.MapIdentityApi<IdentityUser>();
 
 app.UseHttpsRedirection();
 
+app.UseCors(MyAllowSpecificOrigins);
+
 app.UseAuthorization();
 
-app.UseCors("MyAllowSpecificOrigins");
 
 app.MapControllers();
 
