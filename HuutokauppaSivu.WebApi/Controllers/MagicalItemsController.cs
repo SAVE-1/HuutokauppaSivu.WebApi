@@ -68,7 +68,7 @@ public class MagicalItemsController : ControllerBase
         }
         MD5 sum = MD5.Create();
 
-        string preHash = name + DateTime.Now.ToString("HH:mm:ss tt") + "funky extra hash string thing";
+            string preHash = DataHelper.GetHash(postItem.Name);
 
         // create a secondary ID, in order not to reveal the internal structure or additional info of the database to the browser
         string deleteIdentification = BitConverter.ToString(sum.ComputeHash(Encoding.ASCII.GetBytes(preHash))).Replace("-", "");
