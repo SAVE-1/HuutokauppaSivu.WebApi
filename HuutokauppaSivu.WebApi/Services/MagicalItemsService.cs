@@ -1,10 +1,6 @@
 ﻿using Huutokauppa_sivu.Server.Data;
 using Huutokauppa_sivu.Server.Models;
 using HuutokauppaSivu.WebApi.Models;
-using Microsoft.EntityFrameworkCore;
-using System.Runtime.CompilerServices;
-using EFCore.BulkExtensions;
-using System.Collections.Generic;
 
 namespace Huutokauppa_sivu.Server.Services;
 
