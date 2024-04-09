@@ -1,11 +1,10 @@
 ﻿using Huutokauppa_sivu.Server.Models;
 using Huutokauppa_sivu.Server.Services;
+using HuutokauppaSivu.WebApi.Controllers.Helpers;
 using HuutokauppaSivu.WebApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace Huutokauppa_sivu.Server.Controllers;
 
