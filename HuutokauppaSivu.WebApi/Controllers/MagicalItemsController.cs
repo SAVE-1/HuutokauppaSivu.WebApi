@@ -23,14 +23,16 @@ public partial class MagicalItemsController : ControllerBase
     [HttpGet("")]
     public async Task<IActionResult> GetAll(int skip = 0, int take = 50)
     {
-        List<MagicalItem> all = _myService.GetAll(skip, take);
 
-        if(all.Any())
+        try
         {
+            List<MagicalItem> all = _myService.GetAll(skip, take);
             return Ok(all);
         }
-
-        return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+        catch (Exception ex)
+        {
+            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+        }
     }
 
     // GET all action
@@ -51,58 +53,65 @@ public partial class MagicalItemsController : ControllerBase
     [Authorize]
     [HttpPost("NewPosting")]
     public async Task<IActionResult> Create([FromForm] NewPostingHelper postItem)
-    {
+    {  
         try
         { 
             if (postItem.Categories.Count > 50)
-        {
-            return BadRequest("Too many categories in request");
-        }
+            {
+                return BadRequest("Too many categories in request");
+            }
 
             List<CategoryLookup> validCategories = _myService.AreCategoriesValid(postItem.Categories);
 
             if (validCategories.Count != postItem.Categories.Count)
-    {
+            {
+                List<CategoryLookup> invalidCategories = GetInvalidCategories(validCategories, postItem);
 
-            return BadRequest($"Invalid categories in request: {invalidCategoriesString}");
-        }
-        MD5 sum = MD5.Create();
+                string invalidCategoriesString = CreateCategoryString(invalidCategories);
 
-            string preHash = DataHelper.GetHash(postItem.Name);
+                return BadRequest($"Invalid categories in request: {invalidCategoriesString}");
+            }
 
-        // create a secondary ID, in order not to reveal the internal structure or additional info of the database to the browser
-        string deleteIdentification = BitConverter.ToString(sum.ComputeHash(Encoding.ASCII.GetBytes(preHash))).Replace("-", "");
+            // create a secondary ID, in order not to reveal the internal structure or additional info of the database to the browser
+            string deleteIdentification = DataHelper.GetHash(postItem.Name);
 
-        MagicalItem item = new MagicalItem()
-        {
+            MagicalItem item = new MagicalItem()
+            {
                 Price = postItem.Price,
                 Name = postItem.Name,
                 Description = postItem.Description,
-            IsPromoted = false,
-            PromotionImage = null,
-            DeleteIdentification = deleteIdentification,
-            CreatedBy = User.FindFirstValue(ClaimTypes.Name)
-        };
+                IsPromoted = false,
+                PromotionImage = null,
+                DeleteIdentification = deleteIdentification,
+                CreatedBy = User.FindFirstValue(ClaimTypes.Name)
+            };
 
-        bool createNewResult = _myService.CreateNew(item);
+            bool createNewResult = _myService.CreateNew(item);
 
-        List<ItemCategories> itemCategories = new List<ItemCategories>();
+            List<string> createdCategories = CreateItemCategories(deleteIdentification, postItem.Categories);
+
+            List<ItemCategories> itemCategories = new List<ItemCategories>();
 
             foreach (string category in postItem.Categories)
-        {
-            itemCategories.Add(new ItemCategories()
             {
-                DeleteIdentification = deleteIdentification,
-                CategoryId = 1
-            });
-        }
+                itemCategories.Add(new ItemCategories()
+                {
+                    DeleteIdentification = deleteIdentification,
+                    CategoryId = 1
+                });
+            }
 
-        if (createNewResult)
+            if (createNewResult)
+            {
+                return Created("Created", item);
+            }
+
+            return Problem();
+        }
+        catch (Exception ex)
         {
-            return Created("Created", item);
+            return Problem("VIRHE");
         }
-
-        return Problem();
     }
 
     [Authorize]

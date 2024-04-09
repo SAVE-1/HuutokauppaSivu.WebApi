@@ -28,9 +28,20 @@ public partial class MagicalItemsController : ControllerBase
 
         Dictionary<int, string> cats = _myService.GetCategories(categories);
 
+        if(categories.Count == cats.Count)
+        {
+            List<ItemCategories> entries = new List<ItemCategories>();
+            foreach (var x in cats)
+            {
+                entries.Add(new ItemCategories
+                {
+                    DeleteIdentification = id,
+                    CategoryId = x.Key
+                });
+            }
 
-
-
+            _myService.InsertMultipleItemCategoryEntries(entries);
+        }
 
         return new List<string>();
     }
