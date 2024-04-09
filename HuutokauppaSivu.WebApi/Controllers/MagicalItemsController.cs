@@ -22,7 +22,7 @@ public partial class MagicalItemsController : ControllerBase
 
     // GET all action
     [HttpGet("")]
-    public IActionResult GetAll(int skip = 0, int take = 50)
+    public async Task<IActionResult> GetAll(int skip = 0, int take = 50)
     {
         List<MagicalItem> all = _myService.GetAll(skip, take);
 
@@ -36,14 +36,14 @@ public partial class MagicalItemsController : ControllerBase
 
     // GET all action
     [HttpGet("{id}")]
-    public IActionResult GetSingleById(int id)
+    public async Task<IActionResult> GetSingleById(string id)
     {
         return Ok(_myService.GetSingleFromDb(id));
     }
 
     // GET all action
     [HttpGet("PromotedItems")]
-    public IActionResult GetPromoted(int skip = 0, int take = 50)
+    public async Task<IActionResult> GetPromoted(int skip = 0, int take = 50)
     {
         return Ok(_myService.GetPromotedItems(skip, take));
     }
@@ -51,17 +51,18 @@ public partial class MagicalItemsController : ControllerBase
     // POST action
     [Authorize]
     [HttpPost("NewPosting")]
-    public IActionResult Create(int price, string name, string description, List<string> categories)
+    public async Task<IActionResult> Create([FromForm] NewPostingHelper postItem)
     {
-        if(categories.Count > 50)
+        try
+        { 
+            if (postItem.Categories.Count > 50)
         {
             return BadRequest("Too many categories in request");
         }
 
-        List<CategoryLookup> validCategories = _myService.AreCategoriesValid(categories);
+            List<CategoryLookup> validCategories = _myService.AreCategoriesValid(postItem.Categories);
 
-        if (validCategories.Count != categories.Count)
-        {
+            if (validCategories.Count != postItem.Categories.Count)
     {
 
             return BadRequest($"Invalid categories in request: {invalidCategoriesString}");
@@ -75,9 +76,9 @@ public partial class MagicalItemsController : ControllerBase
 
         MagicalItem item = new MagicalItem()
         {
-            Price = price,
-            Name = name,
-            Description = description,
+                Price = postItem.Price,
+                Name = postItem.Name,
+                Description = postItem.Description,
             IsPromoted = false,
             PromotionImage = null,
             DeleteIdentification = deleteIdentification,
@@ -88,7 +89,7 @@ public partial class MagicalItemsController : ControllerBase
 
         List<ItemCategories> itemCategories = new List<ItemCategories>();
 
-        foreach (string category in categories)
+            foreach (string category in postItem.Categories)
         {
             itemCategories.Add(new ItemCategories()
             {
@@ -107,7 +108,7 @@ public partial class MagicalItemsController : ControllerBase
 
     [Authorize]
     [HttpDelete("{deleteIdentification}")]
-    public IActionResult Delete(string deleteIdentification)
+    public async Task<IActionResult> Delete(string deleteIdentification)
     {
         string creator = _myService.GetPostingCreator(deleteIdentification);
         string currentUser = User.FindFirstValue(ClaimTypes.Name);
@@ -128,7 +129,7 @@ public partial class MagicalItemsController : ControllerBase
     }
 
     [HttpGet("{id}/GetCategories")]
-    public IActionResult GetCategoriesByIdSingle(string id)
+    public async Task<IActionResult> GetCategoriesByIdSingle(string id)
     {
         var categories = _myService.GetCategoriesForSingleId(id);
 
