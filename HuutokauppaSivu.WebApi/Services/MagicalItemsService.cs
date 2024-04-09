@@ -7,13 +7,15 @@ namespace Huutokauppa_sivu.Server.Services;
 public interface IItem
 {
     public List<MagicalItem> GetAll(int take, int skip);
-    public MagicalItem GetSingleFromDb(int id);
+    public MagicalItem GetSingleFromDb(string id);
     public List<MagicalItem> GetPromotedItems(int skip, int take);
     public bool CreateNew(MagicalItem newItem);
     public MagicalItem Delete(string deleteIdentification);
     public string GetPostingCreator(string id);
     public List<string> GetCategoriesForSingleId(string id);
     public List<CategoryLookup> AreCategoriesValid(List<string> ids);
+    public Dictionary<int, string> GetCategories(List<string> names);
+    public void InsertMultipleItemCategoryEntries(List<ItemCategories> entries);
 }
 
 public class MagicalItemsService : IItem
@@ -36,9 +38,9 @@ public class MagicalItemsService : IItem
         return blog.ToList();
     }
 
-    public MagicalItem GetSingleFromDb(int id)
+    public MagicalItem GetSingleFromDb(string id)
     {
-        var blog = _context.MagicalItems.Where(b => b.Id == id).First();
+        var blog = _context.MagicalItems.Where(b => b.DeleteIdentification == id).First();
 
         return blog;
     }
@@ -135,17 +137,24 @@ public class MagicalItemsService : IItem
         return cats;
     }
 
-    public void InsertCategoryLookupEntries(List<ItemCategories> entries)
+    public void InsertMultipleItemCategoryEntries(List<ItemCategories> entries)
     {
         _context.ItemCategories.AddRange(entries);
+        _context.SaveChanges();
     }
 
-    public List<CategoryLookup> GetCategories(List<string> names) 
+    public Dictionary<int, string> GetCategories(List<string> names)
     {
+        var l = _context.CategoryLookup.Where(b => names.Contains(b.Name)).Select(b => new { b.Name, b.Id }).ToList();
 
-        return new List<CategoryLookup>();
+        Dictionary<int, string> cats = new Dictionary<int, string>();
 
+        foreach (var p in l)
+        {
+            cats.Add(p.Id, p.Name);
+        }
 
+        return cats;
     }
 
 }
