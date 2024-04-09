@@ -26,10 +26,10 @@ public partial class MagicalItemsController : ControllerBase
 
         try
         {
-            List<MagicalItem> all = _myService.GetAll(skip, take);
+            List<MagicalItem> all = await _myService.GetAll(skip, take);
             return Ok(all);
         }
-        catch (Exception ex)
+        catch
         {
             return new StatusCodeResult(StatusCodes.Status500InternalServerError);
         }
@@ -39,14 +39,14 @@ public partial class MagicalItemsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetSingleById(string id)
     {
-        return Ok(_myService.GetSingleFromDb(id));
+        return Ok(await _myService.GetSingleFromDb(id));
     }
 
     // GET all action
     [HttpGet("PromotedItems")]
     public async Task<IActionResult> GetPromoted(int skip = 0, int take = 50)
     {
-        return Ok(_myService.GetPromotedItems(skip, take));
+        return Ok(await _myService.GetPromotedItems(skip, take));
     }
 
     // POST action
@@ -61,7 +61,7 @@ public partial class MagicalItemsController : ControllerBase
                 return BadRequest("Too many categories in request");
             }
 
-            List<CategoryLookup> validCategories = _myService.AreCategoriesValid(postItem.Categories);
+            List<CategoryLookup> validCategories = await _myService.AreCategoriesValid(postItem.Categories);
 
             if (validCategories.Count != postItem.Categories.Count)
             {
@@ -88,7 +88,7 @@ public partial class MagicalItemsController : ControllerBase
 
             bool createNewResult = _myService.CreateNew(item);
 
-            List<string> createdCategories = CreateItemCategories(deleteIdentification, postItem.Categories);
+            List<string> createdCategories = await CreateItemCategoriesAsync(deleteIdentification, postItem.Categories);
 
             List<ItemCategories> itemCategories = new List<ItemCategories>();
 
@@ -139,7 +139,7 @@ public partial class MagicalItemsController : ControllerBase
     [HttpGet("{id}/GetCategories")]
     public async Task<IActionResult> GetCategoriesByIdSingle(string id)
     {
-        var categories = _myService.GetCategoriesForSingleId(id);
+        var categories = await _myService.GetCategoriesForSingleId(id);
 
         return Ok(categories);
     }

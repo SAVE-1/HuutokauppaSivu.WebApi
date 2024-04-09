@@ -1,21 +1,22 @@
 ﻿using Huutokauppa_sivu.Server.Data;
 using Huutokauppa_sivu.Server.Models;
 using HuutokauppaSivu.WebApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Huutokauppa_sivu.Server.Services;
 
 public interface IItem
 {
-    public List<MagicalItem> GetAll(int take, int skip);
-    public MagicalItem GetSingleFromDb(string id);
-    public List<MagicalItem> GetPromotedItems(int skip, int take);
+    public Task<List<MagicalItem>> GetAll(int skip, int take);
+    public Task<MagicalItem> GetSingleFromDb(string id);
+    public Task<List<MagicalItem>> GetPromotedItems(int take, int skip);
     public bool CreateNew(MagicalItem newItem);
     public MagicalItem Delete(string deleteIdentification);
     public string GetPostingCreator(string id);
-    public List<string> GetCategoriesForSingleId(string id);
-    public List<CategoryLookup> AreCategoriesValid(List<string> ids);
-    public Dictionary<int, string> GetCategories(List<string> names);
-    public void InsertMultipleItemCategoryEntries(List<ItemCategories> entries);
+    public Task<List<string>> GetCategoriesForSingleId(string id);
+    public Task<List<CategoryLookup>> AreCategoriesValid(List<string> ids);
+    public Task<Dictionary<int, string>> GetCategories(List<string> names);
+    public Task InsertMultipleItemCategoryEntries(List<ItemCategories> entries);
 }
 
 public class MagicalItemsService : IItem
@@ -27,7 +28,7 @@ public class MagicalItemsService : IItem
         _context = context;
     }
 
-    public List<MagicalItem> GetAll(int skip, int take)
+    public async Task<List<MagicalItem>> GetAll(int skip, int take)
     {
         var blog = _context.MagicalItems
             .Select(reg => reg)
@@ -35,25 +36,26 @@ public class MagicalItemsService : IItem
             .Skip(skip)
             .Take(take);
 
-        return blog.ToList();
+        return await blog.ToListAsync();
     }
 
-    public MagicalItem GetSingleFromDb(string id)
+    public async Task<MagicalItem> GetSingleFromDb(string id)
     {
-        var blog = _context.MagicalItems.Where(b => b.DeleteIdentification == id).First();
+        var blog = await _context.MagicalItems.Where(b => b.DeleteIdentification == id).FirstAsync();
 
         return blog;
     }
 
-    public List<MagicalItem> GetPromotedItems(int skip, int take)
+    public async Task<List<MagicalItem>> GetPromotedItems(int skip, int take)
     {
         var blog = _context.MagicalItems
-            .Where(b => b.IsPromoted)
-            .OrderBy(reg => reg.Id)
+            .Where(b => b.IsPromoted);
+
+        var blog2 = blog.OrderBy(reg => reg.Id)
             .Skip(skip)
             .Take(take);
 
-        return blog.ToList<MagicalItem>();
+        return await blog.ToListAsync<MagicalItem>();
     }
 
     public bool CreateNew(MagicalItem newItem)
@@ -69,6 +71,7 @@ public class MagicalItemsService : IItem
     {
         var blog = _context.MagicalItems.First(p => p.DeleteIdentification == deleteIdentification);
         _context.Remove(blog);
+
         _context.SaveChanges();
 
         return blog;
@@ -88,7 +91,7 @@ public class MagicalItemsService : IItem
         return "";
     }
 
-    public List<string> GetCategoriesForSingleId(string id)
+    public async Task<List<string>> GetCategoriesForSingleId(string id)
     {
         /*
             -- ORIGINAL SQL QUERY --
@@ -112,7 +115,7 @@ public class MagicalItemsService : IItem
                         on cat.CategoryId equals look.CategoryId
                     select new { look };
 
-        var categories = query.Select(b => b.look.Name).ToList();
+        var categories = await query.Select(b => b.look.Name).ToListAsync();
 
         return categories;
     }
@@ -123,9 +126,9 @@ public class MagicalItemsService : IItem
     /// <returns>
     /// Returns categories that are valid, so returnValue.Length > 0 means there are valid categories.
     /// </returns>
-    public List<CategoryLookup> AreCategoriesValid(List<string> ids)
+    public async Task<List<CategoryLookup>> AreCategoriesValid(List<string> ids)
     {
-        var l = _context.CategoryLookup.Where(b => ids.Contains(b.Name)).Select(b => new { b.Name, b.Id }).ToList();
+        var l = await _context.CategoryLookup.Where(b => ids.Contains(b.Name)).Select(b => new { b.Name, b.Id }).ToListAsync();
 
         List<CategoryLookup> cats = new List<CategoryLookup>();
 
@@ -137,15 +140,15 @@ public class MagicalItemsService : IItem
         return cats;
     }
 
-    public void InsertMultipleItemCategoryEntries(List<ItemCategories> entries)
+    public async Task InsertMultipleItemCategoryEntries(List<ItemCategories> entries)
     {
-        _context.ItemCategories.AddRange(entries);
+        await _context.ItemCategories.AddRangeAsync(entries);
         _context.SaveChanges();
     }
 
-    public Dictionary<int, string> GetCategories(List<string> names)
+    public async Task<Dictionary<int, string>> GetCategories(List<string> names)
     {
-        var l = _context.CategoryLookup.Where(b => names.Contains(b.Name)).Select(b => new { b.Name, b.Id }).ToList();
+        var l = await _context.CategoryLookup.Where(b => names.Contains(b.Name)).Select(b => new { b.Name, b.Id }).ToListAsync();
 
         Dictionary<int, string> cats = new Dictionary<int, string>();
 

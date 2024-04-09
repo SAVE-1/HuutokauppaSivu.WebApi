@@ -23,10 +23,11 @@ public partial class MagicalItemsController : ControllerBase
         return invalidCategoriesString;
     }
 
-    private List<string> CreateItemCategories(string id, List<string> categories)
+    private async Task<List<string>> CreateItemCategoriesAsync(string id, List<string> categories)
     {
 
-        Dictionary<int, string> cats = _myService.GetCategories(categories);
+        Dictionary<int, string> cats = await _myService.GetCategories(categories);
+
 
         if(categories.Count == cats.Count)
         {
